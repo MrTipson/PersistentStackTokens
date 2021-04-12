@@ -9,7 +9,7 @@ namespace MrTipson
         // Keep track of the stack count for all players in the lobby (as the host)
         private int[] stackCount;
         private double multiplier;
-        private string config = "config.txt";
+        private string config;
         public void Awake()
         {
             // Save stack counts as stage ends
@@ -64,12 +64,12 @@ namespace MrTipson
                 stackCount = new int[PlayerCharacterMasterController.instances.Count];
             };
 
-            if (!(System.IO.File.Exists(config) && double.TryParse(System.IO.File.ReadAllText(config), out multiplier)))
+            config = BepInEx.Paths.ConfigPath + "/PersistentStackTokens.cfg";
+            if (!(System.IO.File.Exists(config) && double.TryParse(System.IO.File.ReadAllText(config), out multiplier) && multiplier >= 0))
             {
                 System.IO.File.WriteAllText(config, "1");
                 multiplier = 1;
             }
-            Logger.LogDebug(multiplier);
         }
     }
 }
